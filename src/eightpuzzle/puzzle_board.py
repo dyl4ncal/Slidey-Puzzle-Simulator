@@ -1,7 +1,7 @@
 '''
-Created on Jan. 26, 2019
+Created on Jan. 20, 2019
 
-@author: Dylan
+@author: Dylan Calado
 '''
 
 class Board:
@@ -12,12 +12,15 @@ class Board:
         self.action = action
         self.score = score
         self.path_cost = path_cost
-
+        
+        #Define "map" format for board objects.
         if self.board_state:
-            self.map = ''.join(str(e) for e in self.board_state)
+            self.map = ''.join(str(tile) for tile in self.board_state)
+            
+    #Override "greater than" method to define it in terms of 8-Puzzle boards.
+    def __gt__(self, compare):
+        return self.map > compare.map
 
-    def __eq__(self, other):
-        return self.map == other.map
-
-    def __lt__(self, other):
-        return self.map < other.map
+    #Override "equals" method to define it in terms of 8-Puzzle boards.
+    def __eq__(self, compare):
+        return self.map == compare.map

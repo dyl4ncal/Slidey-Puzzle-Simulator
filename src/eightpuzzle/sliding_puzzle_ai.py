@@ -22,6 +22,7 @@ actual_path_length = 0
 optimal_path_length = 0
 successor_nodes_visited = 0   
 
+#Prints the main menu.
 def print_menu():
     print("""\n---------8_Puzzle Solver: Main Menu---------      
 \n1. Set Initial 8-Puzzle State
@@ -29,7 +30,8 @@ def print_menu():
 3. Solve with Best First Search Algorithm
 4. Solve with A* Search Algorithm
 5. Terminate Program\n""")
-    
+
+#Prints the menu for the user to select a heuristic function.
 def select_heuristic_function():
     heuristic = input("""\n----Heuristic functions----\n
 1. Tiles Out of Place
@@ -126,7 +128,8 @@ def set_initial_state():
     else:
         print("\nInput Error: You must enter each number in the range [0,8] exactly once.")
         set_initial_state()
-        
+      
+#Performs Breadth First Search algorithm.  
 def breadth_first_search(init_state):
     global goal_node, successor_nodes_visited, optimal_path_length
     
@@ -153,6 +156,8 @@ def breadth_first_search(init_state):
         layer_n_nodes = get_children(current)
 
         for next_layer_n_node in layer_n_nodes:
+            
+            #If node hasn't been explored yet, add it to the open list.
             if next_layer_n_node.map not in closed_list:
                 open_list.append(next_layer_n_node)
                 closed_list.add(next_layer_n_node.map)
@@ -162,7 +167,8 @@ def breadth_first_search(init_state):
     
     #If open_list becomes empty, no solution was found and puzzle is unsolvable.
     return 0
-        
+     
+#Performs Greedy Best First Search algorithm.    
 def greedy_best_first_search(init_state, heuristic):
     global goal_node, successor_nodes_visited
     
@@ -208,7 +214,8 @@ def greedy_best_first_search(init_state, heuristic):
                 
         if len(open_list) > successor_nodes_visited:
             successor_nodes_visited = len(open_list)
-    
+
+#Performs A* Search algorithm.    
 def a_star_search(init_state, heuristic):
     global goal_node, successor_nodes_visited
     
@@ -261,7 +268,7 @@ def a_star_search(init_state, heuristic):
                 heappush(open_list, current)
                 closed_list.add(child.map)
                 item[child.map] = current
-            elif child.score < item[child.map][1].score and child.map in item:
+            elif item[child.map][1].score > child.score and child.map in item:
                 chosen_node = open_list.index((item[child.map][1].score, item[child.map][1], item[child.map][1].action))
 
                 open_list[int(chosen_node)] = current
@@ -270,7 +277,7 @@ def a_star_search(init_state, heuristic):
                 
         if len(open_list) > successor_nodes_visited:
             successor_nodes_visited = len(open_list)
-
+            
 #Heuristic which counts the number of out of place tiles.
 def tiles_out_of_place(current_state):
     heuristic_value = 0
@@ -306,6 +313,7 @@ def my_custom_heuristic(current_state):
     heuristic_value_final = max(heuristic_value_1, heuristic_value_2)
     
     #Code to output which heuristic the function uses at each decision.
+    #Can leave this commented out for normal program use.
     '''if heuristic_value_final == heuristic_value_1:
         print("Used heuristic 1")
     elif heuristic_value_final == heuristic_value_2:
@@ -382,6 +390,7 @@ def get_children(node):
 
     return children_nodes
 
+#Retraces the path taken from the starting node to the goal node (for output).
 def generate_solution_path():
     global actual_path_length, goal_node, initial_state, move_sequence
     
@@ -405,6 +414,7 @@ def generate_solution_path():
 
     return move_sequence
 
+#Prints some data about how efficiently the puzzle was solved.
 def output_results_to_console():
     global move_sequence, actual_path_length, optimal_path_length, successor_nodes_visited
     
